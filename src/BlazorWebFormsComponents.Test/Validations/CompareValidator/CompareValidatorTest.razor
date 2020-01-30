@@ -1,0 +1,67 @@
+﻿@inherits ComponentBase
+
+<EditForm Model="@exampleModel" OnValidSubmit="@HandleValidSubmit" OnInvalidSubmit="@HandleInvalidSubmit">
+	Write something
+	<InputText @ref="Number.Current" @bind-Value="exampleModel.Number" />
+	<CompareValidator InputType="string"
+										ControlToValidate="@Number"
+										ValueToCompare="@ValueToCompare"
+										Type="@ValidationDataType"
+										Operator="@ValidationCompareOperator"
+										Text="invalid" />
+</EditForm>
+
+
+@code {
+
+	[Parameter] public ValidationDataType ValidationDataType { get; set; }
+	[Parameter] public ValidationCompareOperator ValidationCompareOperator { get; set; }
+	[Parameter] public string ValueToCompare { get; set; }
+	[Parameter] public string Input { get; set; }
+	[Parameter] public bool ShouldBeValid { get; set; }
+
+
+	bool _validSubmit = false;
+	bool _invalidSubmit = false;
+	ForwardRef<InputBase<string>> Number = new ForwardRef<InputBase<string>>();
+
+	public void Test(IRenderedFragment cut)
+	{
+
+		cut.Find("input").Change(Input);
+
+		cut.Find("form").Submit();
+
+		if (ShouldBeValid)
+		{
+
+
+		}
+		else
+		{
+
+			_validSubmit.ShouldBeFalse();
+			_invalidSubmit.ShouldBeTrue();
+
+			cut.Find("span").FirstChild.TextContent.ShouldContain("invalid");
+
+		}
+	}
+
+	private ExampleModel exampleModel = new ExampleModel();
+
+	private void HandleValidSubmit()
+	{
+		_validSubmit = true;
+	}
+
+	private void HandleInvalidSubmit()
+	{
+		_invalidSubmit = true;
+	}
+
+	public class ExampleModel
+	{
+		public string Number { get; set; }
+	}
+}

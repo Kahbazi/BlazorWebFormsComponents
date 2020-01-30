@@ -1,0 +1,26 @@
+﻿@inherits TestComponentBase
+
+<Fixture Test="FirstTest">
+	<ComponentUnderTest>
+		<CompareValidatorTest @ref="validator"
+													ValidationDataType="Integer"
+													ValidationCompareOperator="Equal"
+													Input="4"
+													ValueToCompare="5"
+													ShouldBeValid="false" />
+	</ComponentUnderTest>
+</Fixture>
+
+
+@code {
+	CompareValidatorTest validator;
+
+	void FirstTest()
+	{
+		var cut = GetComponentUnderTest();
+
+		validator.Test(cut);
+
+	}
+
+}
